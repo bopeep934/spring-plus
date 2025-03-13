@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.expert.domain.common.annotation.Auth;
 import org.example.expert.domain.common.dto.AuthUser;
+import org.example.expert.domain.todo.dto.request.TodoFindDateRequest;
+import org.example.expert.domain.todo.dto.request.TodoFindWeatherRequest;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
 import org.example.expert.domain.todo.dto.response.TodoResponse;
 import org.example.expert.domain.todo.dto.response.TodoSaveResponse;
@@ -37,5 +39,20 @@ public class TodoController {
     @GetMapping("/todos/{todoId}")
     public ResponseEntity<TodoResponse> getTodo(@PathVariable long todoId) {
         return ResponseEntity.ok(todoService.getTodo(todoId));
+    }
+
+    @GetMapping("/todos/findweather")
+    public ResponseEntity<Page<TodoResponse>> getTodoByWeather(@RequestBody TodoFindWeatherRequest todoFindWeatherRequest,
+                                                               @RequestParam(defaultValue = "1") int page ,
+                                                               @RequestParam(defaultValue = "10") int size ) {
+        return ResponseEntity.ok(todoService.getTodoByWeather(todoFindWeatherRequest, page, size));
+    }
+
+
+    @GetMapping("/todos/modifiedat")
+    public ResponseEntity<Page<TodoResponse>> getTodoByModifiedAt(@RequestBody TodoFindDateRequest todoFindDateRequest,
+                                                            @RequestParam(defaultValue = "1") int page ,
+                                                            @RequestParam(defaultValue = "10") int size){
+        return ResponseEntity.ok(todoService.getTodoByModifiedAt(todoFindDateRequest ,page,size));
     }
 }
