@@ -37,19 +37,18 @@ class TodoControllerTest {
     @MockBean
     private JwtUtil jwtUtil;
 
-    @WithAnonymousUser
     @Test
+    @WithMockUser(username = "testuser", roles = "USER")
     void todo_단건_조회에_성공한다() throws Exception {
 
         // given
-        System.out.println("여기 실행됨");
         long todoId = 1L;
         String title = "title";
-//        AuthUser authUser = new AuthUser(1L, "email", "르탄이", UserRole.ROLE_USER);
- //       User user = User.fromAuthUser(authUser);
-        User user =mock(User.class);
+        AuthUser authUser = new AuthUser(1L, "email", "르탄이", UserRole.ROLE_USER);
+        User user = User.fromAuthUser(authUser);
+//        User user =mock(User.class);
         UserResponse userResponse = new UserResponse(user.getId(), user.getEmail(), user.getNickname());
-    //    String token = jwtUtil.createToken(1L,"email","르탄이",UserRole.ROLE_USER); // JWT 생성
+        String token = jwtUtil.createToken(1L,"email","르탄이",UserRole.ROLE_USER); // JWT 생성
 
         TodoResponse response = new TodoResponse(
                 todoId,
@@ -72,6 +71,7 @@ class TodoControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testuser", roles = "USER")
     void todo_단건_조회_시_todo가_존재하지_않아_예외가_발생한다() throws Exception {
         // given
         long todoId = 1L;
