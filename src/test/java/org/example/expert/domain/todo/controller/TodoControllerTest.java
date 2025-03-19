@@ -1,5 +1,6 @@
 package org.example.expert.domain.todo.controller;
 
+import org.example.expert.config.JwtUtil;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.todo.dto.response.TodoResponse;
@@ -12,10 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -30,14 +34,23 @@ class TodoControllerTest {
     @MockBean
     private TodoService todoService;
 
+    @MockBean
+    private JwtUtil jwtUtil;
+
+    @WithAnonymousUser
     @Test
     void todo_단건_조회에_성공한다() throws Exception {
+
         // given
+        System.out.println("여기 실행됨");
         long todoId = 1L;
         String title = "title";
-        AuthUser authUser = new AuthUser(1L, "email", "르탄이", UserRole.USER);
-        User user = User.fromAuthUser(authUser);
-        UserResponse userResponse = new UserResponse(user.getId(), user.getEmail());
+//        AuthUser authUser = new AuthUser(1L, "email", "르탄이", UserRole.ROLE_USER);
+ //       User user = User.fromAuthUser(authUser);
+        User user =mock(User.class);
+        UserResponse userResponse = new UserResponse(user.getId(), user.getEmail(), user.getNickname());
+    //    String token = jwtUtil.createToken(1L,"email","르탄이",UserRole.ROLE_USER); // JWT 생성
+
         TodoResponse response = new TodoResponse(
                 todoId,
                 title,

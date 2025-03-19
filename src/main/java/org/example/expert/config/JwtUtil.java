@@ -10,6 +10,7 @@ import org.example.expert.domain.common.exception.ServerException;
 import org.example.expert.domain.user.enums.UserRole;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.security.Key;
@@ -37,6 +38,7 @@ public class JwtUtil {
     public String createToken(Long userId, String email, String nickname, UserRole userRole) {
         Date date = new Date();
 
+        System.out.println("토큰 만들때 userRole:"+userRole);
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(String.valueOf(userId))
