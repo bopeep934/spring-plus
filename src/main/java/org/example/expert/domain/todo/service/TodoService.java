@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.expert.client.WeatherClient;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.InvalidRequestException;
-import org.example.expert.domain.todo.dto.request.TodoFindDateRequest;
-import org.example.expert.domain.todo.dto.request.TodoFindWeatherRequest;
-import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
+import org.example.expert.domain.todo.dto.request.*;
+import org.example.expert.domain.todo.dto.response.TodoFindResponse;
 import org.example.expert.domain.todo.dto.response.TodoResponse;
 import org.example.expert.domain.todo.dto.response.TodoSaveResponse;
 import org.example.expert.domain.todo.entity.Todo;
@@ -102,7 +101,6 @@ public class TodoService {
         ));
     }
 
-
     @Transactional(readOnly = true)
     public Page<TodoResponse> getTodoByWeather(TodoFindWeatherRequest todoFindWeatherRequest, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
@@ -118,6 +116,33 @@ public class TodoService {
                 todo.getCreatedAt(),
                 todo.getModifiedAt()
         ));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<TodoFindResponse> getTodoByTitle(TodoFindTitleRequest todoFindTitleRequest, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        return todoRepository.findByTitle(pageable,todoFindTitleRequest.getTitle());
+
+//        return todos.map(todo -> new TodoFindResponse((long)1,
+//                todo.getTitle(),
+//                (long)todo.getManagers().size(),(long)todo.getComments().size()
+//        ));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<TodoFindResponse> getTodoByNickname(TodoFindNicknameRequest todoFindNicknameRequest, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        return todoRepository.findByNickname(pageable, todoFindNicknameRequest.getNickname());
+
+    }
+
+    @Transactional(readOnly = true)
+    public Page<TodoFindResponse> getTodoByDate(TodoFindDateRequest todoFindDateRequest, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        return todoRepository.findByCreatedAt(pageable, todoFindDateRequest.getStartModifiedAt(), todoFindDateRequest.getEndModifiedAt());
 
     }
 }

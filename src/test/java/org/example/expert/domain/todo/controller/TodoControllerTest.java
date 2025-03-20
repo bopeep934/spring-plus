@@ -10,6 +10,9 @@ import org.example.expert.domain.user.entity.User;
 import org.example.expert.domain.user.enums.UserRole;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
@@ -37,18 +40,16 @@ class TodoControllerTest {
     @MockBean
     private JwtUtil jwtUtil;
 
-    @Test
-    @WithMockUser(username = "testuser", roles = "USER")
-    void todo_단건_조회에_성공한다() throws Exception {
+   @Test
+   @WithMockUser(username = "testuser", roles = "USER")
+   void todo_단건_조회에_성공한다() throws Exception {
 
         // given
         long todoId = 1L;
         String title = "title";
         AuthUser authUser = new AuthUser(1L, "email", "르탄이", UserRole.ROLE_USER);
         User user = User.fromAuthUser(authUser);
-//        User user =mock(User.class);
         UserResponse userResponse = new UserResponse(user.getId(), user.getEmail(), user.getNickname());
-        String token = jwtUtil.createToken(1L,"email","르탄이",UserRole.ROLE_USER); // JWT 생성
 
         TodoResponse response = new TodoResponse(
                 todoId,

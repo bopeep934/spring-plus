@@ -46,8 +46,7 @@ public class SecurityConfig {
                 .rememberMe(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth// jwtFilter에서 했던 url 허용을 authrizeHttpRequests여기서 해준다.
                         .requestMatchers(request -> request.getRequestURI().startsWith("/auth")).permitAll()
-//                        .requestMatchers("/test").hasAuthority(UserRole.Authority.ADMIN)
-//                        .requestMatchers("/open").permitAll()
+                        .requestMatchers(request -> request.getRequestURI().startsWith("/admin")).hasAuthority(UserRole.Authority.ADMIN)
                         .anyRequest().authenticated()//이 코드가 securityContext에 Authentication 객체가 set된 요청만 통과시키겠다.
                 )
                 .build();
