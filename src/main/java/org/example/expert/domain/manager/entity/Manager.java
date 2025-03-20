@@ -3,8 +3,12 @@ package org.example.expert.domain.manager.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.expert.domain.common.log.Log;
 import org.example.expert.domain.todo.entity.Todo;
 import org.example.expert.domain.user.entity.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
