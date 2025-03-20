@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import lombok.RequiredArgsConstructor;
 import org.example.expert.domain.comment.entity.QComment;
+import org.example.expert.domain.manager.entity.Manager;
 import org.example.expert.domain.manager.entity.QManager;
 import org.example.expert.domain.todo.dto.response.QTodoFindResponse;
 import org.example.expert.domain.todo.dto.response.TodoFindResponse;
@@ -53,7 +54,7 @@ public class TodoRepositoryQueryImpl implements TodoRepositoryQuery {
     @Override
     public Page<TodoFindResponse> findByTitle(Pageable pageable, String title) {
         List<TodoFindResponse> todoPage = jpaQueryFactory
-                .select(new QTodoFindResponse(todos.id, todos.title, managers.count(), comments.count()))
+                .select(new QTodoFindResponse(todos.id, todos.title, managers.countDistinct(), comments.countDistinct()))
                 .from(todos)
                 .leftJoin(todos.managers, managers)
                 .leftJoin(todos.comments, comments)
@@ -75,12 +76,13 @@ public class TodoRepositoryQueryImpl implements TodoRepositoryQuery {
     @Override
     public Page<TodoFindResponse> findByCreatedAt(Pageable pageable, LocalDateTime startDate, LocalDateTime endDate) {
         List<TodoFindResponse> todoList = jpaQueryFactory
-                .select(new QTodoFindResponse(todos.id, todos.title, managers.count(), comments.count()))
+                .select(new QTodoFindResponse(todos.id, todos.title, managers.countDistinct(), comments.countDistinct()))
                 .from(todos)
                 .leftJoin(todos.managers, managers)
                 .leftJoin(todos.comments, comments)
                 .where(todos.createdAt.between(startDate, endDate))
                 .groupBy(todos.id)
+                .orderBy(todos.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -98,7 +100,7 @@ public class TodoRepositoryQueryImpl implements TodoRepositoryQuery {
     public Page<TodoFindResponse> findByNickname(Pageable pageable, String nickname) {
 
         List<TodoFindResponse> todoList = jpaQueryFactory
-                .select(new QTodoFindResponse(todos.id, todos.title, managers.count(), comments.count()))
+                .select(new QTodoFindResponse(todos.id, todos.title, managers.countDistinct(), comments.countDistinct()))
                 .from(todos)
                 .leftJoin(todos.managers, managers)
                 .leftJoin(todos.comments, comments)
