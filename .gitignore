@@ -5,7 +5,6 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-*.properties
 
 
 ### STS ###
@@ -40,4 +39,4 @@ out/
 .vscode/
 
 ### properties ###
-*.properties
+application.properties
